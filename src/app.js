@@ -31,7 +31,10 @@ app.configure(configuration());
 
 var corsConfiguration = {
   credentials: true,
-  origin: 'http://localhost:4000',
+  origin: [
+    'https://web-dcs-uriannrima.c9users.io',
+    'http://localhost:4000'
+  ],
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
