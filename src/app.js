@@ -44,7 +44,11 @@ app.options('*', cors(corsConfiguration)); // include before other routes
 app.use(helmet());
 app.use(compress());
 app.use(cookieParser());
-app.use(bodyParser.json());
+
+app.use(bodyParser.json({
+  limit: '1mb'
+}));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 // Host the public folder
