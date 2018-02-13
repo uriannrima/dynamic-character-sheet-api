@@ -1,7 +1,6 @@
 // Initializes the `feats` service on path `/feats`
 const createService = require('feathers-mongodb');
 const hooks = require('./feats.hooks');
-const filters = require('./feats.filters');
 
 module.exports = function () {
   const app = this;
@@ -20,8 +19,4 @@ module.exports = function () {
   });
 
   service.hooks(hooks);
-
-  if (service.filter) {
-    service.filter(filters);
-  }
 };

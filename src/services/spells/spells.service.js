@@ -1,7 +1,6 @@
 // Initializes the `spells` service on path `/spells`
 const createService = require('feathers-mongodb');
 const hooks = require('./spells.hooks');
-const filters = require('./spells.filters');
 
 module.exports = function () {
   const app = this;
@@ -20,8 +19,4 @@ module.exports = function () {
   });
 
   service.hooks(hooks);
-
-  if (service.filter) {
-    service.filter(filters);
-  }
 };
