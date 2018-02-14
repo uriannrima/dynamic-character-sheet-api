@@ -1,13 +1,13 @@
-
+const removeSubValues = require('../../hooks/remove.sub-values.hook');
 
 module.exports = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [removeSubValues],
+    update: [removeSubValues],
+    patch: [removeSubValues],
     remove: []
   },
 

@@ -1,13 +1,13 @@
-const { authenticate } = require('@feathersjs/authentication').hooks;
+const removeSubValues = require('../../hooks/remove.sub-values.hook');
 
 module.exports = {
   before: {
-    all: [ authenticate('jwt') ],
+    all: [],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [removeSubValues],
+    update: [removeSubValues],
+    patch: [removeSubValues],
     remove: []
   },
 
