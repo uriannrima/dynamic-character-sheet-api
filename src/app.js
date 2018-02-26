@@ -3,21 +3,20 @@ const favicon = require('serve-favicon');
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
+const logger = require('winston');
+
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const configuration = require('@feathersjs/configuration');
-const rest = require('@feathersjs/express/rest');
 const socketio = require('@feathersjs/socketio');
-
-const handler = require('@feathersjs/express/errors');
-const notFound = require('feathers-errors/not-found');
 
 const middleware = require('./middleware');
 const services = require('./services');
 const appHooks = require('./app.hooks');
+const channels = require('./channels');
 
 const mongodb = require('./mongodb');
 
@@ -55,7 +54,7 @@ app.use(favicon(path.join(app.get('public'), 'favicon.ico')));
 app.use('/', express.static(app.get('public')));
 
 app.configure(mongodb);
-app.configure(rest());
+app.configure(express.rest());
 app.configure(socketio());
 
 // Configure other middleware (see `middleware/index.js`)
@@ -63,9 +62,12 @@ app.configure(middleware);
 app.configure(authentication);
 // Set up our services (see `services/index.js`)
 app.configure(services);
+// Set up event channels (see channels.js)
+app.configure(channels);
+
 // Configure a middleware for 404s and the error handler
-app.use(notFound());
-app.use(handler());
+app.use(express.notFound());
+app.use(express.errorHandler({ logger }));
 
 app.hooks(appHooks);
 
