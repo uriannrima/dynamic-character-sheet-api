@@ -1,6 +1,14 @@
 // Application hooks that run for every service
 const logger = require('./hooks/logger');
 
+const addPatchDelta = (context) => {
+  context.result ={
+    model: context.result,
+    delta: context.data
+  }
+  console.log(context.result);
+};
+
 module.exports = {
   before: {
     all: [],
@@ -18,7 +26,7 @@ module.exports = {
     get: [],
     create: [],
     update: [],
-    patch: [],
+    patch: [addPatchDelta],
     remove: []
   },
 
@@ -32,3 +40,4 @@ module.exports = {
     remove: []
   }
 };
+
