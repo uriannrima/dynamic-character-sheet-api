@@ -55,7 +55,9 @@ app.use('/', express.static(app.get('public')));
 
 app.configure(mongodb);
 app.configure(express.rest());
-app.configure(socketio());
+app.configure(socketio({
+  wsEngine: 'uws'
+}));
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
