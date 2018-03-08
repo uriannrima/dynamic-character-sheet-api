@@ -12,6 +12,7 @@ const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const configuration = require('@feathersjs/configuration');
 const socketio = require('@feathersjs/socketio');
+const events = require('./app.events');
 
 const middleware = require('./middleware');
 const services = require('./services');
@@ -55,9 +56,7 @@ app.use('/', express.static(app.get('public')));
 
 app.configure(mongodb);
 app.configure(express.rest());
-app.configure(socketio({
-  wsEngine: 'uws'
-}));
+app.configure(socketio({ wsEngine: 'uws' }, io => events(io, app)));
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware);
