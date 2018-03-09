@@ -7,7 +7,13 @@ module.exports = function (io, app) {
 
     // A pattern to allow "easy" custom events.
     socket.on('custom', (methodName, serviceName, payload) => {
-      app.emit(`${serviceName}/${methodName}`, socket.feathers, payload);
+      
+      const service = app.service(serviceName);
+      if (!service) {
+        console.log('Service not found.', serviceName);
+        return;
+      }
+      service.emit(methodName, socket.feathers, payload);
     });
   });
 };

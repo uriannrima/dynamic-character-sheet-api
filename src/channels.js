@@ -7,11 +7,6 @@ module.exports = function () {
     return;
   }
 
-  app.on('characters/connect', (connection, characterId) => {
-    logger.debug(`Connecting to channel: ${characterId}`);
-    app.channel(`characters/${characterId}`).join(connection);
-  });
-
   app.on('connection', (connection) => {
     // On a new real-time connection, add it to the anonymous channel
     logger.debug('Someone connected in');
@@ -62,6 +57,11 @@ module.exports = function () {
     const { model } = data;
     const { connection } = hook.params;
     return app.channel(`characters/${model._id}`).filter(channelConnection => channelConnection !== connection);
+  });
+
+  app.service('characters').on('connect', (connection, characterId) => {
+    logger.debug(`Connecting to channel: ${characterId}`);
+    app.channel(`characters/${characterId}`).join(connection);
   });
 
   // Here you can also add service specific event publishers
