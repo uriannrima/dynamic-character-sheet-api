@@ -1,6 +1,4 @@
-const logger = require('winston');
-
-module.exports = function () {
+module.exports = function() {
   const app = this;
   if (typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
@@ -9,12 +7,12 @@ module.exports = function () {
 
   app.on('connection', (connection) => {
     // On a new real-time connection, add it to the anonymous channel
-    logger.debug('Someone connected in');
+    console.log('Someone connected in');
     app.channel('anonymous').join(connection);
   });
 
   app.on('login', (authResult, { connection }) => {
-    logger.debug('Someone logged in.', authResult, connection);
+    console.log('Someone logged in.', authResult, connection);
 
     // connection can be undefined if there is no
     // real-time connection, e.g. when logging in via REST
@@ -47,7 +45,7 @@ module.exports = function () {
     // Here you can add event publishers to channels set up in `channels.js`
     // To publish only for a specific event use `app.publish(eventname, () => {})`
 
-    logger.debug('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
+    // console.log('Publishing all events to all authenticated users. See `channels.js` and https://docs.feathersjs.com/api/channels.html for more information.'); // eslint-disable-line
 
     // e.g. to publish all service events to all authenticated users use
     // return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
@@ -60,8 +58,16 @@ module.exports = function () {
   });
 
   app.service('characters').on('connect', (connection, characterId) => {
-    logger.debug(`Connecting to channel: ${characterId}`);
+    console.log(`Connecting to channel: characters/${characterId}`);
     app.channel(`characters/${characterId}`).join(connection);
+    connection.characterId = characterId;
+  });
+
+  app.service('characters').on('disconnect', (connection) => {
+    const { characterId } = connection;
+    delete connection.characterId;
+    console.log(`Disconnecting to channel: characters/${characterId}`);
+    app.channel(`characters/${characterId}`).leave(connection);
   });
 
   // Here you can also add service specific event publishers
