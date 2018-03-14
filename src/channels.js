@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function () {
   const app = this;
   if (typeof app.channel !== 'function') {
     // If no real-time functionality has been configured just return
@@ -51,10 +51,17 @@ module.exports = function() {
     // return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
   });
 
+  app.service('characters').publish('created', (data, hook) => {
+    return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
+  });
+
+  app.service('characters').publish('updated', (data, hook) => {
+    return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
+  });
+
   app.service('characters').publish('patched', (data, hook) => {
     const { model } = data;
-    const { connection } = hook.params;
-    return app.channel(`characters/${model._id}`).filter(channelConnection => channelConnection !== connection);
+    return app.channel(`characters/${model._id}`).filter(connection => connection !== hook.params.connection);
   });
 
   app.service('characters').on('connect', (connection, characterId) => {
