@@ -32,6 +32,7 @@ app.configure(configuration());
 var corsConfiguration = {
   credentials: true,
   origin: [
+    'https://web-dcs.firebaseapp.com',
     'https://web-dcs-uriannrima.c9users.io',
     'http://localhost:4000'
   ],
