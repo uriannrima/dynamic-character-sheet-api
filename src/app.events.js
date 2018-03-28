@@ -1,8 +1,8 @@
-module.exports = function(io, app) {
+module.exports = function (io, app) {
   // Allow wildcard event name on socket.
 
   // Detect someone connected.
-  io.on('connection', function(socket) {
+  io.on('connection', function (socket) {
     // After someone connected, we have it's socket.
 
     // A pattern to allow "easy" custom events.
@@ -13,7 +13,11 @@ module.exports = function(io, app) {
         console.log('Service not found.', serviceName);
         return;
       }
-      service.emit(methodName, socket.feathers, payload);
+      var hook = { path: serviceName, service, app, result: payload, params: { connection: socket.feathers } };
+      service.emit(methodName, {
+        connection: socket.feathers,
+        payload
+      }, hook);
     });
   });
 };

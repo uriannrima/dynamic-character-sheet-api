@@ -47,6 +47,13 @@ module.exports = function () {
     }
   });
 
+  /* app.service('characters').on('connect', ({ payload, connection }) => {
+    console.log(`Connecting to channel: characters/${payload.characterId}`);
+    app.channel(`characters/${payload.characterId}`).join(connection);
+    connection.characterId = payload.characterId;
+    return 'oi';
+  }); */
+
   // eslint-disable-next-line no-unused-vars
   app.publish((data, hook) => {
     // Here you can add event publishers to channels set up in `channels.js`
@@ -71,10 +78,15 @@ module.exports = function () {
     return app.channel(`characters/${model._id}`).filter(connection => connection !== hook.params.connection);
   });
 
-  app.service('characters').on('connect', (connection, characterId) => {
+  app.service('characters').publish('connect', ({ payload: characterId, connection }, hook) => {
     console.log(`Connecting to channel: characters/${characterId}`);
     app.channel(`characters/${characterId}`).join(connection);
     connection.characterId = characterId;
+  });
+
+  app.service('characters').publish('sync', (data, hook) => {
+    const { payload: characterId } = data;
+    return app.channel(`characters/${characterId}`).filter(connection => connection !== hook.params.connection);
   });
 
   app.service('characters').on('disconnect', (connection) => {

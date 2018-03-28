@@ -9,7 +9,7 @@ module.exports = function () {
   const options = { paginate };
 
   // Initialize our service with any options it requires
-  app.use('/characters', createService(options));
+  app.use('/characters', Object.assign(createService(options), { events: ['sync', 'connect'] }));
 
   // Get an array from character.
   // Just for user case, if necessary to do something route specific.
@@ -29,7 +29,7 @@ module.exports = function () {
 
       const service = app.service('characters');
       return service.get(characterId, params).then(character => {
-        const element = character[arrayName].find(el => el._id === arrayId);        
+        const element = character[arrayName].find(el => el._id === arrayId);
         element.deleted = true;
         return service.update(character._id, character, params);
       });
