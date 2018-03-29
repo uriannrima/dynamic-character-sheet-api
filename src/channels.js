@@ -78,14 +78,15 @@ module.exports = function () {
     return app.channel(`characters/${model._id}`).filter(connection => connection !== hook.params.connection);
   });
 
-  app.service('characters').publish('connect', ({ payload: characterId, connection }, hook) => {
+  app.service('characters').publish('connect', (characterId, hook) => {
+    const { connection } = hook.params;
     console.log(`Connecting to channel: characters/${characterId}`);
     app.channel(`characters/${characterId}`).join(connection);
     connection.characterId = characterId;
   });
 
   app.service('characters').publish('sync', (data, hook) => {
-    const { payload: characterId } = data;
+    const { characterId } = data;
     return app.channel(`characters/${characterId}`).filter(connection => connection !== hook.params.connection);
   });
 

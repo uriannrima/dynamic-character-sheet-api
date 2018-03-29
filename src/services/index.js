@@ -5,6 +5,7 @@ const spells = require('./spells/spells.service.js');
 const users = require('./users/users.service.js');
 const specialAbilities = require('./special-abilities/special-abilities.service.js');
 const languages = require('./languages/languages.service.js');
+const syncing = require('./syncing/syncing.service.js');
 module.exports = function () {
   const app = this; // eslint-disable-line no-unused-vars
   app.configure(characters);
@@ -14,4 +15,5 @@ module.exports = function () {
   app.configure(users);
   app.configure(specialAbilities);
   app.configure(languages);
+  app.configure(syncing);
 };

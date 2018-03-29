@@ -14,10 +14,7 @@ module.exports = function (io, app) {
         return;
       }
       var hook = { path: serviceName, service, app, result: payload, params: { connection: socket.feathers } };
-      service.emit(methodName, {
-        connection: socket.feathers,
-        payload
-      }, hook);
+      service.emit(methodName, payload, hook);
     });
   });
 };
