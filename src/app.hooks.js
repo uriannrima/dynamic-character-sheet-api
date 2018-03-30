@@ -1,23 +1,6 @@
 // Application hooks that run for every service
 const logger = require('./hooks/logger');
 
-const handleVuexData = (context) => {
-  // Recover Vuex module/mutation and payload from data.
-  const { mutation, payload } = context.data;
-  // Persist it on the context for after hook.
-  context.mutation = mutation;
-  // Reset data to payload data.
-  context.data = payload;
-};
-
-const addPatchDelta = (context) => {
-  context.result = {
-    model: context.result,
-    delta: context.data,
-    mutation: context.mutation
-  };
-};
-
 module.exports = {
   before: {
     all: [],
@@ -25,7 +8,7 @@ module.exports = {
     get: [],
     create: [],
     update: [],
-    patch: [handleVuexData],
+    patch: [],
     remove: []
   },
 
@@ -35,7 +18,7 @@ module.exports = {
     get: [],
     create: [],
     update: [],
-    patch: [addPatchDelta],
+    patch: [],
     remove: []
   },
 

@@ -65,6 +65,10 @@ module.exports = function () {
     // return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
   });
 
+  app.service('channels').publish('patched', (data, { id, params: { connection } }) => {
+    return app.channel(id).filter(channelConnection => channelConnection !== connection);
+  });
+
   app.service('characters').publish('created', (data, hook) => {
     return app.channel('anonymous').filter(connection => connection !== hook.params.connection);
   });
