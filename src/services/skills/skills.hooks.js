@@ -1,20 +1,23 @@
-const removeSubValues = require('../../hooks/remove.sub-values.hook');
+const CacheMap = require('@feathers-plus/cache');
+const { cache } = require('feathers-hooks-common');
+
+var cacheMap = CacheMap({ max: 100 }); // Keep the 100 most recently used.
 
 module.exports = {
   before: {
     all: [],
-    find: [],
-    get: [],
-    create: [removeSubValues],
-    update: [removeSubValues],
-    patch: [removeSubValues],
+    find: [cache(cacheMap)],
+    get: [cache(cacheMap)],
+    create: [],
+    update: [],
+    patch: [],
     remove: []
   },
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [cache(cacheMap)],
+    get: [cache(cacheMap)],
     create: [],
     update: [],
     patch: [],

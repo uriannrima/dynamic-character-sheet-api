@@ -19,5 +19,8 @@
       1,
       "always"
     ]
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }
